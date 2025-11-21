@@ -1,3 +1,4 @@
+import 'package:client/core/widgets/custom_field.dart';
 import 'package:flutter/material.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -8,14 +9,40 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Column(
-        children: [
-          const Text("Sign Up",style: TextStyle(fontSize: 50,fontWeight: FontWeight.bold),),
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Form(
+          key: formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Sign Up",
+                style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 30),
+              CustomField(hintText: 'Name', controller: nameController),
+              const SizedBox(height: 15),
+              CustomField(hintText: 'Email', controller: emailController),
+              const SizedBox(height: 15),
+              CustomField(
+                hintText: 'Password',
+                controller: passwordController,
+                isObscureText: true,
+              ),
+              const SizedBox(height: 20),
+            ],
+          ),
+        ),
       ),
     );
   }
