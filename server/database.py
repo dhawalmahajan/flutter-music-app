@@ -7,4 +7,10 @@ from config import settings
 DATABASE_URL = settings.database_url
 engine = create_engine(DATABASE_URL, echo=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-db = SessionLocal()
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
