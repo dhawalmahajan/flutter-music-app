@@ -1,7 +1,9 @@
 import 'package:client/core/theme/app_pallete.dart';
 import 'package:client/core/widgets/custom_field.dart';
+import 'package:client/features/auth/repositories/auth_remote_repository.dart';
 import 'package:client/features/auth/view/widgets/auth_gradient_button.dart';
 import 'package:flutter/material.dart';
+import 'package:fpdart/fpdart.dart' hide State;
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -50,7 +52,21 @@ class _SignUpPageState extends State<SignUpPage> {
                 isObscureText: true,
               ),
               const SizedBox(height: 20),
-              AuthGradientButton(buttonText: 'Sign up', onTap: () async {}),
+              AuthGradientButton(
+                buttonText: 'Sign up',
+                onTap: () async {
+                  final user = await AuthRemoteRepository().signup(
+                    name: nameController.text,
+                    email: emailController.text,
+                    password: passwordController.text,
+                  );
+                  final val = switch (user) {
+                    Left(value: final l) => l,
+                    Right(value: final r) => r.toString(),
+                  };
+                  print(val);
+                },
+              ),
               // const SizedBox(height: 20),
               GestureDetector(
                 onTap: () {},
