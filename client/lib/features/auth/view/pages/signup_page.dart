@@ -1,4 +1,5 @@
 import 'package:client/core/theme/app_pallete.dart';
+import 'package:client/core/utils.dart';
 import 'package:client/core/widgets/custom_field.dart';
 import 'package:client/core/widgets/loader.dart';
 import 'package:client/features/auth/view/pages/login_page.dart';
@@ -34,9 +35,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
     ref.listen(authViewmodelProvider, (previous, next) {
       next?.when(
         data: (data) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(SnackBar(content: Text('Signup Successful')));
+          showSnackBar(context, "Account created successfully");
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const LoginPage()),
