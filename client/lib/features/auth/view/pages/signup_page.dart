@@ -94,7 +94,14 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                     ),
                     // const SizedBox(height: 20),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LoginPage(),
+                          ),
+                        );
+                      },
                       child: RichText(
                         text: TextSpan(
                           text: 'Already have an account? ',
