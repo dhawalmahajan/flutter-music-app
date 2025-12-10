@@ -1,3 +1,5 @@
+import jwt
+from fastapi.param_functions import Header
 import token
 import uuid
 import bcrypt
@@ -49,4 +51,16 @@ def login_user(user: UserLogin, db:Session = Depends(get_db)):
     finally:
         db.close()
        
-        
+@router.get("/")
+def current_user_data(db: Session = Depends(get_db),x_auth_token = Header()):
+    try:
+        if not x_auth_token:
+            raise HTTPException(status_code=401, detail="No auth token, Access denied ")
+        verified_token = jwt.decode(x_auth_token, 'password_key', algorithms=['HS256'])
+        if not verified_token:
+            raise HTTPException(status_code=401, detail="Token verification failed, Authorization denied ")
+        uid = verified_token.get('id')
+        return uid
+    except jwt.PyJWTError:
+        raise HTTPException(status_code=401, detail="Token verification failed, Authorization denied ")
+    

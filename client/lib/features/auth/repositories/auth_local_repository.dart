@@ -15,7 +15,7 @@ class AuthLocalRepository {
 
   void setToken(String? token) {
     if (token != null) {
-      _sharedPreferences.setString('x-auth-token', token!);
+      _sharedPreferences.setString('x-auth-token', token);
     }
   }
 
