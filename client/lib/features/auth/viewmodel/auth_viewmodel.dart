@@ -79,13 +79,15 @@ class AuthViewmodel extends _$AuthViewmodel {
           l.message,
           StackTrace.current,
         ),
-        Right(value: final r) => state = AsyncValue.data(r),
+        Right(value: final r) => state = _getDataSuccess(r),
       };
-      return val.maybeWhen(
-        data: (user) => user,
-        orElse: () => null,
-      );
+      return val.value;
     }
     return null;
+  }
+
+  AsyncValue<UserModel> _getDataSuccess(UserModel user) {
+    _currentUserNotifier.addUser(user);
+    return state = AsyncValue.data(user);
   }
 }
