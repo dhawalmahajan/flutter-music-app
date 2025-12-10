@@ -31,7 +31,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final isLoading = ref.watch(authViewmodelProvider)?.isLoading == true;
+    final isLoading = ref.watch(
+      authViewmodelProvider.select((val) => val?.isLoading == true),
+    );
+
     ref.listen(authViewmodelProvider, (previous, next) {
       next?.when(
         data: (data) {
@@ -78,15 +81,16 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     AuthGradientButton(
                       buttonText: 'Sign in',
                       onTap: () async {
-                        final user = await AuthRemoteRepository().login(
-                          email: emailController.text,
-                          password: passwordController.text,
-                        );
-                        final val = switch (user) {
-                          Left(value: final l) => l,
-                          Right(value: final r) => r.toString(),
-                        };
-                        print(val);
+                        if (formKey.currentState?.validate() ?? false) {
+                          await ref
+                              .read(authViewmodelProvider.notifier)
+                              .loginUser(
+                                email: emailController.text,
+                                password: passwordController.text,
+                              );
+                        } else {
+                          showSnackBar(context, "Please fill all fields");
+                        }
                       },
                     ),
                     const SizedBox(height: 20),

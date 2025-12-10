@@ -8,6 +8,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final container = ProviderContainer();
   await container.read(authViewmodelProvider.notifier).initSharedPreferences();
+  final userModel = await container
+      .read(authViewmodelProvider.notifier)
+      .getData();
+  print(userModel);
   runApp(
     UncontrolledProviderScope(
       container: container,
@@ -23,7 +27,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Music App',
       theme: AppTheme.darkThemeMode,
       home: const SignUpPage(),
     );
