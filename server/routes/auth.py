@@ -6,6 +6,7 @@ import bcrypt
 from fastapi import Depends, HTTPException
 
 from database import get_db
+from middleware.auth_middleware import auth_middleware
 from models.user import User
 from pydantic_schemas.user_create import UserCreate
 from pydantic_schemas.user_login import UserLogin
@@ -52,15 +53,9 @@ def login_user(user: UserLogin, db:Session = Depends(get_db)):
         db.close()
        
 @router.get("/")
-def current_user_data(db: Session = Depends(get_db),x_auth_token = Header()):
-    try:
-        if not x_auth_token:
-            raise HTTPException(status_code=401, detail="No auth token, Access denied ")
-        verified_token = jwt.decode(x_auth_token, 'password_key', algorithms=['HS256'])
-        if not verified_token:
-            raise HTTPException(status_code=401, detail="Token verification failed, Authorization denied ")
-        uid = verified_token.get('id')
-        return uid
-    except jwt.PyJWTError:
-        raise HTTPException(status_code=401, detail="Token verification failed, Authorization denied ")
+def current_user_data(db: Session = Depends(get_db),user_dict = Depends(auth_middleware)):
+   user = db.query(User).filter(User.id == user_dict['uid']).first()
+   if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+   return user  
     
