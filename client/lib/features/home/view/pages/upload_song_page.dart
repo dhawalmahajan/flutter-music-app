@@ -21,6 +21,12 @@ class _UploadSongPageState extends ConsumerState<UploadSongPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Upload Song'),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.check),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -72,6 +78,9 @@ class _UploadSongPageState extends ConsumerState<UploadSongPage> {
               ),
               const SizedBox(height: 20),
               ColorPicker(
+                pickersEnabled: {
+                  ColorPickerType.wheel: true,
+                },
                 color: selectedColor,
                 onColorChanged: (Color color) {
                   setState(() {
