@@ -34,6 +34,9 @@ class AuthViewmodel extends _$AuthViewmodel {
       email: email,
       password: password,
     );
+
+    if (!ref.mounted) return;
+
     final val = switch (user) {
       Left(value: final l) => state = AsyncValue.error(
         l.message,
@@ -53,6 +56,9 @@ class AuthViewmodel extends _$AuthViewmodel {
       email: email,
       password: password,
     );
+
+    if (!ref.mounted) return;
+
     final val = switch (user) {
       Left(value: final l) => state = AsyncValue.error(
         l.message,
@@ -66,7 +72,8 @@ class AuthViewmodel extends _$AuthViewmodel {
   AsyncValue<UserModel>? _loginSuccess(UserModel user) {
     _authLocalRepository.setToken(user.token);
     _currentUserNotifier.addUser(user);
-    return AsyncValue.data(user);
+    state = AsyncValue.data(user);
+    return state;
   }
 
   Future<UserModel?> getData() async {
@@ -74,6 +81,9 @@ class AuthViewmodel extends _$AuthViewmodel {
     final token = _authLocalRepository.getToken();
     if (token != null) {
       final res = await _authRemoteRepository.getCurrentUserData(token);
+
+      if (!ref.mounted) return null;
+
       final val = switch (res) {
         Left(value: final l) => state = AsyncValue.error(
           l.message,

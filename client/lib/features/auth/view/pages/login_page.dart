@@ -1,6 +1,8 @@
 import 'package:client/core/utils.dart';
 import 'package:client/core/widgets/loader.dart';
 import 'package:client/features/auth/viewmodel/auth_viewmodel.dart';
+import 'package:client/features/home/view/pages/home_page.dart';
+import 'package:client/features/home/view/pages/upload_song_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:client/core/theme/app_pallete.dart';
 import 'package:client/core/widgets/custom_field.dart';
@@ -38,11 +40,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     ref.listen(authViewmodelProvider, (previous, next) {
       next?.when(
         data: (data) {
-          //TODO: Navigate to home page
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(builder: (context) => const LoginPage()),
-          // );
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const UploadSongPage()),
+            (_) => false,
+          );
         },
         error: (error, st) {
           showSnackBar(context, error.toString());
