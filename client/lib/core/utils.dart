@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void showSnackBar(BuildContext context, String content) {
   ScaffoldMessenger.of(context)
@@ -21,6 +22,19 @@ Future<File?> pickImage() async {
       return File(filePickerRes.files.first.xFile.path);
     }
     return null;
+  } on PlatformException catch (e) {
+    if (e.code == 'invalid_format_type') {
+      // Fallback: try a generic picker if device has no handler for image mime types
+      try {
+        final fallback = await FilePicker.platform.pickFiles(
+          type: FileType.any,
+        );
+        if (fallback != null && fallback.files.isNotEmpty) {
+          return File(fallback.files.first.path ?? '');
+        }
+      } catch (_) {}
+    }
+    return null;
   } catch (e) {
     return null;
   }
@@ -38,8 +52,23 @@ Future<File?> pickAudio() async {
       // Use the selected audio file
     }
     return null;
+  } on PlatformException catch (e) {
+    if (e.code == 'invalid_format_type') {
+      // Some devices don't have an activity for audio mime types — fallback to any
+      try {
+        final fallback = await FilePicker.platform.pickFiles(
+          type: FileType.any,
+        );
+        if (fallback != null && fallback.files.isNotEmpty) {
+          return File(fallback.files.first.path ?? '');
+        }
+      } catch (e) {
+        print(e);
+      }
+    }
+    return null;
   } catch (e) {
-    // Handle any errors that occur during file picking
+    // Handle any other errors that occur during file picking
     return null;
   }
 }
