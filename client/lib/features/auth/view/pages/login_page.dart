@@ -1,16 +1,13 @@
 import 'package:client/core/utils.dart';
 import 'package:client/core/widgets/loader.dart';
 import 'package:client/features/auth/viewmodel/auth_viewmodel.dart';
-import 'package:client/features/home/view/pages/home_page.dart';
 import 'package:client/features/home/view/pages/upload_song_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:client/core/theme/app_pallete.dart';
 import 'package:client/core/widgets/custom_field.dart';
-import 'package:client/features/auth/repositories/auth_remote_repository.dart';
 import 'package:client/features/auth/view/pages/signup_page.dart';
 import 'package:client/features/auth/view/widgets/auth_gradient_button.dart';
 import 'package:flutter/material.dart';
-import 'package:fpdart/fpdart.dart' hide State;
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
