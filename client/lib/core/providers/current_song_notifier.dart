@@ -19,7 +19,34 @@ class CurrentSongNotifier extends _$CurrentSongNotifier {
       Uri.parse(song.song_url),
     );
     await audioPlayer?.setAudioSource(audioSource);
+    audioPlayer?.playerStateStream.listen((state) {
+      if (state.processingState == ProcessingState.completed) {
+        isPlaying = false;
+        this.state = this.state?.copyWith(hex_code: this.state?.hex_code);
+      }
+    });
+
     audioPlayer?.play();
+    isPlaying = true;
     state = song;
+  }
+
+  void playPause() {
+    if (isPlaying) {
+      audioPlayer?.pause();
+    } else {
+      audioPlayer?.play();
+    }
+    isPlaying = !isPlaying;
+    state = state?.copyWith(hex_code: state?.hex_code);
+  }
+
+  void seek(double val) {
+    audioPlayer?.seek(
+      Duration(
+        milliseconds: (val * (audioPlayer?.duration?.inMilliseconds ?? 0))
+            .toInt(),
+      ),
+    );
   }
 }
