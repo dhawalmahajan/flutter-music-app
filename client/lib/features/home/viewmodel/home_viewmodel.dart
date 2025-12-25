@@ -7,6 +7,7 @@ import 'package:client/features/home/models/fav_song_model.dart';
 import 'package:client/features/home/models/song_model.dart';
 import 'package:client/features/home/repositories/home_local_repository.dart';
 import 'package:client/features/home/repositories/home_repository.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'home_viewmodel.g.dart';
@@ -18,6 +19,21 @@ Future<List<SongModel>> getAllSongs(Ref ref) async {
       .watch(homeRepositoryProvider)
       .getAllSongs(
         token: token,
+      );
+
+  return switch (res) {
+    Left(value: final l) => throw l.message,
+    Right(value: final r) => r,
+  };
+}
+
+@riverpod
+Future<List<SongModel>> getFavSongs(Ref ref) async {
+  final token = ref.watch(currentUserProvider.select((user) => user?.token));
+  final res = await ref
+      .watch(homeRepositoryProvider)
+      .getFavSongs(
+        token: token ?? '',
       );
 
   return switch (res) {
@@ -79,44 +95,44 @@ class HomeViewmodel extends _$HomeViewmodel {
         l.message,
         StackTrace.current,
       ),
-      Right(value: final r) => _favSongSuccess(r, songId),
+      Right(value: final r) => r, //_favSongSuccess(r, songId),
     };
     print(val);
   }
 
-  AsyncValue _favSongSuccess(bool isFavorited, String songId) {
-    final userNotifier = ref.read(currentUserProvider.notifier);
-    if (isFavorited) {
-      userNotifier.addUser(
-        ref
-            .read(currentUserProvider)?
-            .copyWith(
-              favorites: [
-                ...ref.read(currentUserProvider)?.favorites,
-                FavSongModel(
-                  id: '',
-                  song_id: songId,
-                  user_id: '',
-                ),
-              ],
-            ),
-      );
-    } else {
-      userNotifier.addUser(
-        ref
-            .read(currentUserProvider)?
-            .copyWith(
-              favorites: ref
-                  .read(currentUserProvider)?
-                  .favorites
-                  .where(
-                    (fav) => fav.song_id != songId,
-                  )
-                  .toList(),
-            ),
-      );
-    }
-    ref.invalidate(getFavSongsProvider);
-    return state = AsyncValue.data(isFavorited);
-  }
+  // AsyncValue _favSongSuccess(bool isFavorited, String songId) {
+  //   final userNotifier = ref.read(currentUserProvider.notifier);
+  //   if (isFavorited) {
+  //     userNotifier.addUser(
+  //       ref
+  //           .read(currentUserProvider)?
+  //           .copyWith(
+  //             favorites: [
+  //               ...ref.read(currentUserProvider)?.favorites,
+  //               FavSongModel(
+  //                 id: '',
+  //                 song_id: songId,
+  //                 user_id: '',
+  //               ),
+  //             ],
+  //           ),
+  //     );
+  //   } else {
+  //     userNotifier.addUser(
+  //       ref
+  //           .read(currentUserProvider)?
+  //           .copyWith(
+  //             favorites: ref
+  //                 .read(currentUserProvider)?
+  //                 .favorites
+  //                 .where(
+  //                   (fav) => fav.song_id != songId,
+  //                 )
+  //                 .toList(),
+  //           ),
+  //     );
+  //   }
+  //   ref.invalidate(getFavSongsProvider);
+  //   return state = AsyncValue.data(isFavorited);
+  // }
 }

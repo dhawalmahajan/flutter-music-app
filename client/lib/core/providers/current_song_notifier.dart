@@ -1,5 +1,6 @@
 import 'package:client/features/home/models/song_model.dart';
 import 'package:client/features/home/repositories/home_local_repository.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:just_audio/just_audio.dart';
 part 'current_song_notifier.g.dart';
@@ -20,7 +21,7 @@ class CurrentSongNotifier extends _$CurrentSongNotifier {
     audioPlayer = AudioPlayer();
     final audioSource = AudioSource.uri(
       Uri.parse(song.song_url),
-       tag: MediaItem(
+      tag: MediaItem(
         id: song.id,
         title: song.song_name,
         artist: song.artist,

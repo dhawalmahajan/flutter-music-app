@@ -14,9 +14,8 @@ class MusicPlayer extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentSong = ref.watch(currentSongProvider);
     final songNotifier = ref.read(currentSongProvider.notifier);
-
     final userFavorites = ref.watch(
-      currentUserProvider.notifier.select((data) => data?.favorites),
+      currentUserProvider.select((data) => data?.favorites ?? []),
     );
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -108,7 +107,7 @@ class MusicPlayer extends ConsumerWidget {
                           await ref
                               .read(homeViewmodelProvider.notifier)
                               .favSong(
-                                songId: currentSong?.id,
+                                songId: currentSong?.id ?? '',
                               );
                         },
                         icon: Icon(

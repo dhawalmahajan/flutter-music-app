@@ -48,6 +48,45 @@ final class GetAllSongsProvider
 
 String _$getAllSongsHash() => r'd27796c8ed8386b6352ba246fecaf95c752456af';
 
+@ProviderFor(getFavSongs)
+const getFavSongsProvider = GetFavSongsProvider._();
+
+final class GetFavSongsProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<SongModel>>,
+          List<SongModel>,
+          FutureOr<List<SongModel>>
+        >
+    with $FutureModifier<List<SongModel>>, $FutureProvider<List<SongModel>> {
+  const GetFavSongsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'getFavSongsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$getFavSongsHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<List<SongModel>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<SongModel>> create(Ref ref) {
+    return getFavSongs(ref);
+  }
+}
+
+String _$getFavSongsHash() => r'5e9a5dc0af1241bb573481cc816badba644409d3';
+
 @ProviderFor(HomeViewmodel)
 const homeViewmodelProvider = HomeViewmodelProvider._();
 
@@ -80,7 +119,7 @@ final class HomeViewmodelProvider
   }
 }
 
-String _$homeViewmodelHash() => r'e8079d915302968a7cd96033be2fa3d681064479';
+String _$homeViewmodelHash() => r'ddf913e284d1d660991533390accbb9f34b938d3';
 
 abstract class _$HomeViewmodel extends $Notifier<AsyncValue<dynamic>?> {
   AsyncValue<dynamic>? build();
