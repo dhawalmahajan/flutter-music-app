@@ -119,7 +119,7 @@ final class HomeViewmodelProvider
   }
 }
 
-String _$homeViewmodelHash() => r'ddf913e284d1d660991533390accbb9f34b938d3';
+String _$homeViewmodelHash() => r'0fac3ecb2a552d0a0edef084192fefd268055d99';
 
 abstract class _$HomeViewmodel extends $Notifier<AsyncValue<dynamic>?> {
   AsyncValue<dynamic>? build();

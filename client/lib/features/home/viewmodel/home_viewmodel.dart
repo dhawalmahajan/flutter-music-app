@@ -95,44 +95,47 @@ class HomeViewmodel extends _$HomeViewmodel {
         l.message,
         StackTrace.current,
       ),
-      Right(value: final r) => r, //_favSongSuccess(r, songId),
+      Right(value: final r) => _favSongSuccess(
+        r,
+        songId,
+      ),
     };
     print(val);
   }
 
-  // AsyncValue _favSongSuccess(bool isFavorited, String songId) {
-  //   final userNotifier = ref.read(currentUserProvider.notifier);
-  //   if (isFavorited) {
-  //     userNotifier.addUser(
-  //       ref
-  //           .read(currentUserProvider)?
-  //           .copyWith(
-  //             favorites: [
-  //               ...ref.read(currentUserProvider)?.favorites,
-  //               FavSongModel(
-  //                 id: '',
-  //                 song_id: songId,
-  //                 user_id: '',
-  //               ),
-  //             ],
-  //           ),
-  //     );
-  //   } else {
-  //     userNotifier.addUser(
-  //       ref
-  //           .read(currentUserProvider)?
-  //           .copyWith(
-  //             favorites: ref
-  //                 .read(currentUserProvider)?
-  //                 .favorites
-  //                 .where(
-  //                   (fav) => fav.song_id != songId,
-  //                 )
-  //                 .toList(),
-  //           ),
-  //     );
-  //   }
-  //   ref.invalidate(getFavSongsProvider);
-  //   return state = AsyncValue.data(isFavorited);
-  // }
+  AsyncValue _favSongSuccess(bool isFavorited, String songId) {
+    final userNotifier = ref.read(currentUserProvider.notifier);
+    if (isFavorited) {
+      userNotifier.addUser(
+        ref
+            .read(currentUserProvider)!
+            .copyWith(
+              favorites: [
+                ...ref.read(currentUserProvider)!.favorites,
+                FavSongModel(
+                  id: '',
+                  song_id: songId,
+                  user_id: '',
+                ),
+              ],
+            ),
+      );
+    } else {
+      userNotifier.addUser(
+        ref
+            .read(currentUserProvider)!
+            .copyWith(
+              favorites: ref
+                  .read(currentUserProvider)!
+                  .favorites
+                  .where(
+                    (fav) => fav.song_id != songId,
+                  )
+                  .toList(),
+            ),
+      );
+    }
+    ref.invalidate(getFavSongsProvider);
+    return state = AsyncValue.data(isFavorited);
+  }
 }
