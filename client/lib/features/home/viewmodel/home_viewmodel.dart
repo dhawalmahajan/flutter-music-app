@@ -104,37 +104,39 @@ class HomeViewmodel extends _$HomeViewmodel {
   }
 
   AsyncValue _favSongSuccess(bool isFavorited, String songId) {
+    final user = ref.read(currentUserProvider);
+
+    // Guard clause: user not loaded / logged out
+    if (user == null) {
+      return state = const AsyncValue.error(
+        'User not available',
+        StackTrace.empty,
+      );
+    }
     final userNotifier = ref.read(currentUserProvider.notifier);
     if (isFavorited) {
       userNotifier.addUser(
-        ref
-            .read(currentUserProvider)!
-            .copyWith(
-              favorites: [
-                ...ref.read(currentUserProvider)!.favorites,
-                FavSongModel(
-                  id: '',
-                  song_id: songId,
-                  user_id: '',
-                ),
-              ],
+        user.copyWith(
+          favorites: [
+            ...user.favorites,
+            FavSongModel(
+              id: '',
+              song_id: songId,
+              user_id: '',
             ),
+          ],
+        ),
       );
     } else {
       userNotifier.addUser(
-        ref
-            .read(currentUserProvider)!
-            .copyWith(
-              favorites: ref
-                  .read(currentUserProvider)!
-                  .favorites
-                  .where(
-                    (fav) => fav.song_id != songId,
-                  )
-                  .toList(),
-            ),
+        user.copyWith(
+          favorites: user.favorites
+              .where((fav) => fav.song_id != songId)
+              .toList(),
+        ),
       );
     }
+
     ref.invalidate(getFavSongsProvider);
     return state = AsyncValue.data(isFavorited);
   }
